@@ -1,8 +1,8 @@
-APP = "xx-gpt"
+APP = "xh-gpt"
 
 b:
 	@echo $(APP)
-	@rm $(APP)
+	@rm -f $(APP)
 	@go build -o $(APP)
 
 # build and run
