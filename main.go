@@ -30,11 +30,20 @@ func main() {
 
 var commands = []*cli.Command{
 	{
+		Name:    "Free",
+		Aliases: []string{"f"},
+		Usage:   "自由模式",
+		Action: func(cCtx *cli.Context) error {
+			triggerInput(vo.PromptFree)
+			return nil
+		},
+	},
+	{
 		Name:    "translate",
 		Aliases: []string{"t"},
 		Usage:   "英翻中",
 		Action: func(cCtx *cli.Context) error {
-			triggerInput(vo.BuildPrompt(vo.PromptTransfer))
+			triggerInput(vo.PromptTransfer)
 			return nil
 		},
 	},
@@ -43,20 +52,39 @@ var commands = []*cli.Command{
 		Aliases: []string{"g"},
 		Usage:   "语法检查",
 		Action: func(cCtx *cli.Context) error {
-			triggerInput(vo.BuildPrompt(vo.PromptGrammar))
+			triggerInput(vo.PromptGrammar)
+			return nil
+		},
+	},
+	{
+		Name:    "sentiment classifier",
+		Aliases: []string{"s"},
+		Usage:   "情感值分类",
+		Action: func(cCtx *cli.Context) error {
+			triggerInput(vo.PromptSentiment)
+			return nil
+		},
+	},
+	{
+		Name:    "tag",
+		Aliases: []string{"tag"},
+		Usage:   "标签提取",
+		Action: func(cCtx *cli.Context) error {
+			triggerInput(vo.PromptTag)
 			return nil
 		},
 	},
 }
 
-func triggerInput(prompt []vo.Message) {
+func triggerInput(promptType int) {
+	prompt := vo.BuildPrompt(promptType)
 	fmt.Println()
 	input.Input("请输入：", true, func(input string) error {
 		if strings.Index(input, ":q") >= 0 {
 			return nil
 		}
 		service.AskGPT(prompt, input)
-		triggerInput(prompt)
+		triggerInput(promptType)
 		return nil
 	})
 }

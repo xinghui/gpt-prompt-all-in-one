@@ -1,12 +1,17 @@
 package vo
 
 const (
-	PromptTransfer = 1
-	PromptGrammar  = 2
+	PromptFree      = 0
+	PromptTransfer  = 1
+	PromptGrammar   = 2
+	PromptSentiment = 3
+	PromptTag       = 4
 )
 
 func BuildPrompt(promptType int) []Message {
 	switch promptType {
+	case PromptFree:
+		return nil
 	case PromptTransfer:
 		return []Message{
 			{
@@ -34,6 +39,29 @@ func BuildPrompt(promptType int) []Message {
 							I have [finish] it, [are] you want to [going] to home?
 							I have [finished] it. [do] you want to [go] home?
 							`,
+			},
+		}
+	case PromptSentiment:
+		return []Message{
+			{
+				Role: RoleSystem,
+				Content: `sentiment classifier.
+Example1:
+	Input: I Love this movie!
+	Output: Positive
+Example2:
+	Input: What a waste of time.
+	Output: Negative
+
+You output the result.
+`,
+			},
+		}
+	case PromptTag:
+		return []Message{
+			{
+				Role:    RoleSystem,
+				Content: `以下文本帮我提取出主题，按几个词做总结。`,
 			},
 		}
 	}
